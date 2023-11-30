@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"bj38web/service/getCaptcha/imitate/vsm"
+	"bj38web/service/getCaptcha/model"
 	"bj38web/web/proto/getCaptcha"
 	"bj38web/web/utils"
 	"context"
@@ -39,4 +41,25 @@ func GetImageCd(c *gin.Context) {
 	err = json.Unmarshal(response.B, &img)
 	// 写浏览器数据
 	png.Encode(c.Writer, img)
+}
+
+// https://localhost:8080//api/v1.0/smscode/13218001299?text=St442C
+func GetSmsCd(c *gin.Context) {
+	phone := c.Param("phone")
+	imageCode := c.Query("text")
+	uuid := c.Query("uuid")
+
+	verify := model.CheckImgCode(uuid, imageCode)
+	if !verify {
+		resp := make(map[string]string)
+		resp["errno"] = utils.CHECK_FAILD
+		resp["errmsg"] = utils.RecodeText(utils.CHECK_FAILD)
+		c.JSON(http.StatusOK, resp)
+		return
+	}
+	vsm.GenVerifyCode(phone)
+	resp := make(map[string]string)
+	resp["errno"] = utils.SUCCESS
+	resp["errmsg"] = utils.RecodeText(utils.SUCCESS)
+	c.JSON(http.StatusOK, resp)
 }

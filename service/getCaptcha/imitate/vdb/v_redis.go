@@ -27,7 +27,7 @@ func Remove(key string) {
 	delete(rdb, key)
 }
 
-func get(key string) string {
+func Get(key string) string {
 	v, ok := rdb[key]
 	if ok {
 		if v.t.UnixMilli()+v.exp*1000 < time.Now().UnixMilli() {

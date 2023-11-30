@@ -2,6 +2,7 @@ package main
 
 import (
 	"bj38web/web/controller"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,9 +14,12 @@ func main() {
 	// 路由匹配
 	router.Static("/home", "view")
 
-	router.GET("/api/v1.0/session", controller.GetSession)
-
-	router.GET("/api/v1.0/imagecode/:uuid", controller.GetImageCd)
+	rg1 := router.Group("/api/v1.0")
+	{
+		rg1.GET("/session", controller.GetSession)
+		rg1.GET(",imagecode/:uuid", controller.GetImageCd)
+		rg1.GET("/smscode/:phone", controller.GetSmsCd)
+	}
 
 	// 启动
 	router.Run(":8080")

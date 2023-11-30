@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"bj38web/service/getCaptcha/model"
 	pb "bj38web/service/getCaptcha/proto/getCaptcha"
+	"bj38web/web/model"
 	"context"
 	"encoding/json"
 	"image/color"
